@@ -1,3 +1,6 @@
+require:
+  - rubocop-rspec
+
 AllCops:
   TargetRubyVersion: 2.6
 
@@ -11,3 +14,29 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+
+# Exclude rspec tests from block length restrictions
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context', 'shared_examples']
+  Exclude:
+    - 'db/seeds.rb'
+
+Style/Documentation:
+  Exclude:
+    - app/helpers/application_helper.rb
+    - app/helpers/articles_helper.rb
+    - app/mailers/application_mailer.rb
+    - app/models/application_record.rb
+    - config/application.rb
+    - db/migrate/**.*
+
+# RSpec overrides
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/MultipleMemoizedHelpers:
+  AllowSubject: true
+  Max: 6

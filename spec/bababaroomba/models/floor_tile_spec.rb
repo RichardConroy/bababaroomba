@@ -1,0 +1,72 @@
+# frozen_string_literal: true
+
+require "bababaroomba"
+require "bababaroomba/models/dirt"
+require "bababaroomba/models/dirtbot"
+require "bababaroomba/models/floor_tile"
+require "bababaroomba/models/point"
+require "pry"
+
+RSpec.describe Bababaroomba::Models::FloorTile do
+  subject(:floor_tile) { described_class.new point: point }
+
+  let(:x_coord) { 2 }
+  let(:y_coord) { 3 }
+  let(:point) { Bababaroomba::Models::Point.new x_coord, y_coord }
+  let(:dirt) { Bababaroomba::Models::Dirt.new }
+
+  describe "#add_item" do
+    it "masks the floortile glyph" do
+      expect { floor_tile.add_item(dirt) }.to change(floor_tile, :glyph).from(".").to(dirt.glyph)
+    end
+
+    it "assigns item location to itself" do
+      expect { floor_tile.add_item(dirt) }.to change(dirt, :location).to(floor_tile)
+    end
+
+    context "when not an Item" do
+      it "raises" do
+        expect { floor_tile.add_item "fooobaar" }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when item already at another tile" do
+      # (a) remove from other tile and add here, or raise, or introduce #move_item
+      xit "consider the correct behaviour here"
+    end
+
+    context "with multiple objects" do
+      let(:dirtbot) { Bababaroomba::Models::Dirtbot.new }
+
+      it "masks the floortile glyph with the item of highest Z-order" do
+        floor_tile.add_item(dirtbot)
+        floor_tile.add_item(dirt)
+
+        expect(floor_tile.glyph).to eq dirtbot.glyph
+      end
+    end
+  end
+
+  describe "#remove_item" do
+    context "when item not at this tile" do
+      it "raises" do
+        expect { floor_tile.remove_item(dirt) }.to raise_error(ArgumentError) # TODO: make a custom error
+      end
+    end
+
+    context "when item at another tile" do
+      let(:other_point) { Bababaroomba::Models::Point.new 9, 9 }
+      let(:other_floor_tile) { described_class.new other_point: point }
+
+      before { other_floor_tile.add_item dirt }
+
+      xit "consider if this is necessary"
+    end
+
+    context "when not an Item" do
+      it "raises" do
+        expect { floor_tile.remove_item "fooobaar" }.to raise_error(ArgumentError)
+      end
+    end
+  end
+end
