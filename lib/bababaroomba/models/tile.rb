@@ -1,46 +1,45 @@
+# frozen_string_literal: true
+
 module Bababaroomba
+  module Models
+    # Abstract base class implementation of a tile in a floorplan
+    class Tile
+      attr_reader :coords, :connections
 
-  class Tile
-    # Representation of a grid tile
+      BOUNDARIES = %i[north south east west].freeze
+      OPPOSITES = {
+        north: :south,
+        south: :north,
+        east: :west,
+        west: :east
+      }.freeze
 
-    attr_reader :coords, :connections
-    BOUNDARIES = [:north, :south, :east, :west].freeze
+      def initialize(point:)
+        @coords = point
+        @connections = {}
+      end
 
-    def initialize(point:)
-      @coords = point
-      @connections = {}
-    end
+      def connect(connection, boundary)
+        raise ArgumentError, "connection is required" unless connection
+        raise ArgumentError, "boundary must be one of #{BOUNDARIES.join(" ")}" unless BOUNDARIES.include? boundary
 
-    def connect(connection, boundary)
-      raise ArgumentError, "connection is required" unless connection
-      raise ArgumentError, "boundary must be one of #{BOUNDARIES.join(' ')}" unless BOUNDARIES.include? boundary
-      connections[boundary] = connection
-    end
+        connections[boundary] = connection
+      end
 
-    def passable?
-      false
-    end
+      def passable?
+        false
+      end
 
-    def glyph
-      'X'
-    end
+      def glyph
+        "X"
+      end
 
-    #TODO: delegate co-ordinates to stored point object
+      # TODO: delegate co-ordinates to stored point object
 
-    private
+      private
 
-    def opposite(boundary)
-      case boundary
-      when :north
-        :south
-      when :south
-        :north
-      when :east
-        :west
-      when :west
-        :east
-      else
-        raise ArgumentError, "#{boundary} - must be one of: #{BOUNDARIES.join}"
+      def opposite(boundary)
+        OPPOSITES.fetch(boundary)
       end
     end
   end

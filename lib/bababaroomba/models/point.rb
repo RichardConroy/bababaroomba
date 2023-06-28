@@ -1,14 +1,18 @@
+# frozen_string_literal: true
+
 module Bababaroomba
+  # Representation of an x-y coordinate on a geometric plane
   class Point
     attr_reader :x, :y
 
-    def initialize(x,y)
-      @x,@y = x,y
+    def initialize(x_coord, y_coord)
+      @x = x_coord
+      @y = y_coord
     end
 
     def eql?(other)
       self.class == other.class &&
-      @x == other.x && @y == other.y
+        @x == other.x && @y == other.y
     end
 
     def hash

@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 module Bababaroomba
-  class NullTile < Tile
-    # Representation of null space on the map
+  module Models
+    # Null object representation of the edge of the map. Border tiles for connections with this.
+    class NullTile < Tile
+      def passable?
+        false
+      end
 
-    def passable?
-      false
-    end
-
-    def glyph
-      ' '
+      def glyph
+        " "
+      end
     end
   end
 end

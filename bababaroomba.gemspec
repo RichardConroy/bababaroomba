@@ -32,20 +32,20 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_development_dependency 'cucumber'
-  spec.add_development_dependency 'aruba'
-  spec.add_development_dependency 'dotenv'
-  spec.add_development_dependency 'pronto'
-  spec.add_development_dependency 'pronto-flay'
-  spec.add_development_dependency 'pronto-reek'
-  spec.add_development_dependency 'pronto-rubocop'
-  spec.add_development_dependency 'pronto-undercover'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rspec', '~> 3.11'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'simplecov-lcov'
-  spec.add_development_dependency 'undercover'
+  spec.add_development_dependency "aruba"
+  spec.add_development_dependency "cucumber"
+  spec.add_development_dependency "dotenv"
+  spec.add_development_dependency "pronto"
+  spec.add_development_dependency "pronto-flay"
+  spec.add_development_dependency "pronto-reek"
+  spec.add_development_dependency "pronto-rubocop"
+  spec.add_development_dependency "pronto-undercover"
+  spec.add_development_dependency "pry"
+  spec.add_development_dependency "rspec", "~> 3.11"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "simplecov-lcov"
+  spec.add_development_dependency "undercover"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

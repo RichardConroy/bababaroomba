@@ -1,28 +1,27 @@
-require 'bababaroomba'
-require 'bababaroomba/models/floorplan'
-require 'pry'
+# frozen_string_literal: true
 
-RSpec.describe Bababaroomba::Models::Floorplan do 
-  describe '.generate_default' do
+require "bababaroomba"
+require "bababaroomba/models/floorplan"
+require "pry"
 
-    subject(:floorplan) { described_class.generate_default(4,4)}
-    it 'creates a floorplan' do
-
+RSpec.describe Bababaroomba::Models::Floorplan do
+  describe ".generate_default" do
+    subject(:floorplan) { described_class.generate_default(4, 4) }
+    it "creates a floorplan" do
     end
 
-    it 'connects all tiles' do
-
+    it "connects all tiles" do
     end
 
-    it 'creates floor tiles' do
+    it "creates floor tiles" do
       expect(floorplan.tiles.count).to eq 16
     end
   end
 
-  describe '#render' do
-    subject(:floorplan) { described_class.generate_default(8,3)}
+  describe "#render" do
+    subject(:floorplan) { described_class.generate_default(8, 3) }
 
-    it 'draws the map on the console' do
+    it "draws the map on the console" do
       expected_grid = <<~GRID
         ........
         ........

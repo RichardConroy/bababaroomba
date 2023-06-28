@@ -1,11 +1,19 @@
-module WallTile
-  class WallTile < Tile
-    def passable?
-      false
-    end
+# frozen_string_literal: true
 
-    def glyph
-      '#'
+require "bababaroomba"
+require "bababaroomba/models/tile"
+
+module Bababaroomba
+  module Models
+    # Tile subclass that represents an impassible structure
+    class WallTile < Tile
+      def passable?
+        false
+      end
+
+      def glyph
+        "#"
+      end
     end
   end
 end
