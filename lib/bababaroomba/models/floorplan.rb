@@ -49,8 +49,6 @@ module Bababaroomba
       end
 
       def self.create_grid_tiles(width, height, floorplan)
-        null_point = Point.new(-1001, -1001)
-
         0.upto(width - 1).each do |x_coord|
           0.upto(height - 1).each do |y_coord|
             point = Point.new(x_coord, y_coord)
@@ -70,6 +68,10 @@ module Bababaroomba
         east_boundary =  floorplan.find(x_coord + 1, y_coord)
         tile.connect(north_boundary, :north)
         tile.connect(east_boundary, :east)
+      end
+
+      def self.null_point
+        @null_point ||= Point.new(-1001, -1001)
       end
     end
   end

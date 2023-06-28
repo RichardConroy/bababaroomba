@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_development_dependency "aruba"
+  spec.add_development_dependency "brakeman"
   spec.add_development_dependency "cucumber"
   spec.add_development_dependency "dotenv"
   spec.add_development_dependency "pronto"
