@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require "bababaroomba"
 require "bababaroomba/path"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/models/tile"
+require "bababaroomba/models/null_tile"
+require "bababaroomba/models/point"
 
 RSpec.describe Bababaroomba::Path do
   subject(:path) { described_class.new origin: origin, floorplan: floorplan }
@@ -20,6 +23,42 @@ RSpec.describe Bababaroomba::Path do
 
       it "updates the current position" do
         expect { path.add_step(next_tile) }.to change(path, :current).to(next_tile)
+      end
+    end
+
+    context "with non-adjacent tile" do
+      let(:next_tile) { floorplan.find! 5, 3 }
+
+      it { expect { path.add_step(next_tile) }.to raise_error Bababaroomba::Error }
+    end
+
+    context "with impassible tile" do
+      let(:next_tile) { Bababaroomba::Models::NullTile.new point: Bababaroomba::Models::Point.new(2, 2) }
+
+      it { expect { path.add_step(next_tile) }.to raise_error Bababaroomba::Error }
+    end
+
+    context "with nil" do
+      let(:next_tile) { nil }
+
+      it { expect { path.add_step(next_tile) }.to raise_error Bababaroomba::Error }
+    end
+
+    context "when not a tile" do
+      let(:next_tile) { {} }
+
+      it { expect { path.add_step(next_tile) }.to raise_error Bababaroomba::Error }
+    end
+
+    context "when tile is present in path" do
+      let(:next_tile) { floorplan.find! 3, 2 }
+
+      before do
+        3.upto(5) { |n| path.add_step(floorplan.find!(n, 2)) }
+      end
+
+      it "raises" do
+        expect { path.add_step(next_tile) }.to raise_error(Bababaroomba::Error)
       end
     end
   end

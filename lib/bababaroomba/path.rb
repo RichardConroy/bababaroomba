@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "bababaroomba"
+require "bababaroomba/models/tile"
+require "bababaroomba/models/null_tile"
+
 module Bababaroomba
   # A sequence of tiles through the floorplan
   class Path
@@ -13,12 +17,8 @@ module Bababaroomba
     end
 
     def add_step(tile)
-      # guards:
-      # tile must be a Tile
-      # tile must be connected to :current
-      # tile must be passable
-      # tile cannot already be in the current path
-      # tile must be in floorplan
+      guard!(tile)
+
       step_sequence << tile
     end
 
@@ -49,5 +49,37 @@ module Bababaroomba
     private
 
     attr_accessor :floorplan, :step_sequence
+
+    def guard!(tile)
+      guard_type! tile
+      guard_duplicate! tile
+      guard_present_in_floorplan! tile
+      guard_passable! tile
+      guard_adjacent! tile
+    end
+
+    def guard_adjacent!(tile)
+      raise ::Bababaroomba::Error, "tile must be adjacent to path.current tile" unless adjacent?(tile)
+    end
+
+    def guard_passable!(tile)
+      raise ::Bababaroomba::Error, "tile must be passable" unless tile.passable?
+    end
+
+    def guard_present_in_floorplan!(tile)
+      raise ::Bababaroomba::Error, "tile must be in floorplan" unless floorplan.find(tile.coords.x, tile.coords.y)
+    end
+
+    def guard_duplicate!(tile)
+      raise ::Bababaroomba::Error, "tile already in path" if step_sequence.include? tile
+    end
+
+    def guard_type!(tile)
+      raise ::Bababaroomba::Error, "Tile required. #{tile.class} received" unless tile.is_a? Bababaroomba::Models::Tile
+    end
+
+    def adjacent?(tile)
+      ((current.coords.x + current.coords.y) - (tile.coords.x + tile.coords.y)).abs == 1
+    end
   end
 end
