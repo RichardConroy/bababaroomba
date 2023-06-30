@@ -31,7 +31,9 @@ module Bababaroomba
     end
 
     def breadcrumbs
-      # print out the steps ie. NEWSEE
+      step_sequence.each_cons(2).map do |pair|
+        breadcrumb(calculate_differences(pair))
+      end.join("")
     end
 
     def fork
@@ -49,6 +51,26 @@ module Bababaroomba
     private
 
     attr_accessor :floorplan, :step_sequence
+
+    def calculate_differences(coordinate_pair)
+      {
+        x_diff: coordinate_pair.last.coords.x - coordinate_pair.first.coords.x,
+        y_diff: coordinate_pair.last.coords.y - coordinate_pair.first.coords.y
+      }
+    end
+
+    def breadcrumb(x_diff:, y_diff:)
+      case [x_diff, y_diff]
+      when [1, 0]
+        "E"
+      when [-1, 0]
+        "W"
+      when [0, 1]
+        "N"
+      when [0, -1]
+        "S"
+      end
+    end
 
     def guard!(tile)
       guard_type! tile

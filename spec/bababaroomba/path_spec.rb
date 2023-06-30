@@ -62,4 +62,24 @@ RSpec.describe Bababaroomba::Path do
       end
     end
   end
+
+  describe "#breadcrumbs" do
+    context "when path length == 1" do
+      it "has no breadcrumbs" do
+        expect(path.breadcrumbs).to eq ""
+      end
+    end
+
+    context "with multiple steps" do
+      before do
+        [[3, 2], [3, 3], [3, 4], [2, 4], [1, 4], [1, 3], [1, 2]].each do |coords|
+          path.add_step(floorplan.find!(*coords))
+        end
+      end
+
+      it "spells out the coordinate transitions in NSEW format" do
+        expect(path.breadcrumbs).to eq "ENNWWSS"
+      end
+    end
+  end
 end
