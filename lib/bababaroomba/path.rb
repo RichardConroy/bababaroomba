@@ -18,6 +18,7 @@ module Bababaroomba
       # tile must be connected to :current
       # tile must be passable
       # tile cannot already be in the current path
+      # tile must be in floorplan
       step_sequence << tile
     end
 
@@ -26,7 +27,7 @@ module Bababaroomba
     end
 
     def length
-      # step_sequence.lenght
+      step_sequence.length
     end
 
     def breadcrumbs

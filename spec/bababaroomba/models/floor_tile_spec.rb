@@ -100,28 +100,4 @@ RSpec.describe Bababaroomba::Models::FloorTile do
       it { expect { floor_tile.remove_item(dirt) }.to change(floor_tile, :dirty?).from(true).to(false) }
     end
   end
-
-  # TODO: move #neighbours specs to superclass or another service
-
-  describe "#neighbours" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-    let(:north_neighbour) { described_class.new point: Bababaroomba::Models::Point.new(x_coord, y_coord + 1) }
-    let(:south_neighbour) { described_class.new point: Bababaroomba::Models::Point.new(x_coord, y_coord - 1) }
-    let(:west_neighbour) { Bababaroomba::Models::NullTile.new point: Bababaroomba::Models::Point.new(-1001, -1001) }
-    let(:east_neighbour) { described_class.new point: Bababaroomba::Models::Point.new(x_coord + 1, y_coord) }
-
-    # before do
-    #   Bababaroomba::Models::Connection.create north_neighbour, floor_tile
-    #   Bababaroomba::Models::Connection.create floor_tile, south_neighbour
-    #   Bababaroomba::Models::Connection.create east_neighbour, floor_tile
-    #   Bababaroomba::Models::Connection.create floor_tile, west_neighbour
-    # end
-
-    it "includes passable neighboring tiles" do
-      expect(floor_tile.neighbours).to include north_neighbour, south_neighbour, east_neighbour
-    end
-
-    it "omits impassable tiles" do
-      expect(floor_tile.neighbours).not_to include west_neighbour
-    end
-  end
 end

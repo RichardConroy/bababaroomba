@@ -6,6 +6,7 @@ require "bababaroomba/models/dirt"
 require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/path"
+require "bababaroomba/services/neighbours"
 require "pry"
 
 module Bababaroomba
@@ -18,7 +19,7 @@ module Bababaroomba
     def initialize
       @floorplan = Models::Floorplan.generate_default(8, 5)
       @dirtbot = Models::Dirtbot.new
-      @origin = floorplan.find(0, 0)
+      @origin = floorplan.find!(0, 0)
       @origin.add_item @dirtbot
       randomly_seed_dirt
     end
@@ -30,15 +31,17 @@ module Bababaroomba
       current_location = dirtbot.location
       path = Path.new origin: @origin, floorplan: @floorplan
       path.add_step(current_location)
-      seek_dirt(path)
+      path = seek_dirt(path)
+      puts path.breadcrumbs
     end
 
     def seek_dirt(path)
       location = path.current
       return path if location.dirty?
 
-      unvisited_neighbours = (location.neighbours - path.locations)
-      raise StandardError, "Painted into corner!" if unvisited_neighbours.empty?
+      unvisited_neighbours = Bababaroomba::Services::Neighbours.call(floorplan: @floorplan,
+                                                                     tile: location).map(&:passable?)
+      raise Error, "Painted into corner!" if unvisited_neighbours.empty?
 
       path.add_step(unvisited_neighbours.first)
       seek_dirt(path)
@@ -72,4 +75,4 @@ module Bababaroomba
   end
 end
 
-Bababaroomba::Application.run
+# Bababaroomba::Application.run

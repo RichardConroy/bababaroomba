@@ -25,12 +25,16 @@ module Bababaroomba
       end
 
       def find(x_coord, y_coord)
+        tiles[Point.new(x_coord, y_coord)]
+      end
+
+      def find!(x_coord, y_coord)
         tiles.fetch(Point.new(x_coord, y_coord))
       end
 
       def render
         (height - 1).downto(0) do |y_coord|
-          row = 0.upto(width - 1).map { |x_coord| find(x_coord, y_coord) }
+          row = 0.upto(width - 1).map { |x_coord| find!(x_coord, y_coord) }
           puts row.map(&:glyph).join
         end
       end
@@ -39,11 +43,11 @@ module Bababaroomba
       def self.generate_default(width = 20, height = 15)
         floorplan = Floorplan.new
         create_grid_tiles(width, height, floorplan)
-        0.upto(width - 2).each do |x_coord|
-          0.upto(height - 2).each do |y_coord|
-            connect_tiles(floorplan, x_coord, y_coord)
-          end
-        end
+        # 0.upto(width - 2).each do |x_coord|
+        #   0.upto(height - 2).each do |y_coord|
+        #     connect_tiles(floorplan, x_coord, y_coord)
+        #   end
+        # end
         floorplan
       end
 
@@ -58,8 +62,8 @@ module Bababaroomba
 
       def self.connect_tiles(floorplan, x_coord, y_coord)
         tile = floorplan.find(x_coord, y_coord)
-        north_boundary = floorplan.find(x_coord, y_coord + 1)
-        east_boundary =  floorplan.find(x_coord + 1, y_coord)
+        north_boundary = floorplan.find!(x_coord, y_coord + 1)
+        east_boundary =  floorplan.find!(x_coord + 1, y_coord)
         Connection.create north_boundary, tile
         Connection.create east_boundary, tile
       end
