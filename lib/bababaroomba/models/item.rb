@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
-
 module Bababaroomba
   module Models
     # Base abstract class for an object that can exist on the floor

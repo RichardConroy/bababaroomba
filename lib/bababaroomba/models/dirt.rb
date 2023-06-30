@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
 require "bababaroomba/models/item"
 
 module Bababaroomba

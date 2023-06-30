@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
 require "bababaroomba/models/point"
 require "bababaroomba/models/floor_tile"
 require "bababaroomba/models/null_tile"
@@ -52,11 +51,6 @@ module Bababaroomba
         0.upto(width - 1).each do |x_coord|
           0.upto(height - 1).each do |y_coord|
             point = Point.new(x_coord, y_coord)
-            floor_tile = FloorTile.new(point: point)
-            # connect each new tile to void
-            Tile::BOUNDARIES.each do |boundary|
-              floor_tile.connect(NullTile.new(point: null_point), boundary)
-            end
             floorplan.tiles[point] = FloorTile.new(point: point)
           end
         end
@@ -66,8 +60,8 @@ module Bababaroomba
         tile = floorplan.find(x_coord, y_coord)
         north_boundary = floorplan.find(x_coord, y_coord + 1)
         east_boundary =  floorplan.find(x_coord + 1, y_coord)
-        tile.connect(north_boundary, :north)
-        tile.connect(east_boundary, :east)
+        Connection.create north_boundary, tile
+        Connection.create east_boundary, tile
       end
 
       def self.null_point

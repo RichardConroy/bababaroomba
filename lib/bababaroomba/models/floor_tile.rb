@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
+require "bababaroomba/models/dirt"
 require "bababaroomba/models/tile"
 require "bababaroomba/models/null_tile"
 require "bababaroomba/models/point"
@@ -31,6 +31,17 @@ module Bababaroomba
         return "." if contents.empty?
 
         contents.min_by { |item| -item.z_order }.glyph
+      end
+
+      def dirty?
+        contents.any? { |item| item.is_a? Models::Dirt }
+      end
+
+      def neighbours
+        neighbours = connections.map { |connection| [connection.first_tile, connection.second_tile] }
+                                .flatten.uniq.select(&:passable?)
+        neighbours.delete(self)
+        neighbours
       end
 
       private
