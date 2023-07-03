@@ -7,6 +7,7 @@ require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/path"
 require "bababaroomba/services/neighbours"
+require "bababaroomba/seek/lazy_maze"
 require "pry"
 
 module Bababaroomba
@@ -17,62 +18,91 @@ module Bababaroomba
     attr_accessor :floorplan, :dirtbot, :origin
 
     def initialize
-      @floorplan = Models::Floorplan.generate_default(8, 5)
+      @floorplan = Models::Floorplan.generate_default(floor_plan_width, floor_plan_height)
       @dirtbot = Models::Dirtbot.new
       @origin = floorplan.find!(0, 0)
       @origin.add_item @dirtbot
       randomly_seed_dirt
     end
 
-    def seek_and_destroy
-      floorplan.render
-      # Services::Seek::LazyMaze.call # take first (unpassable) connections at every tile
-
-      current_location = dirtbot.location
-      path = Path.new origin: @origin, floorplan: @floorplan
-      path.add_step(current_location)
-      path = seek_dirt(path)
-      puts path.breadcrumbs
+    def seek_and_destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      while floorplan.tiles.values.any?(&:dirty?)
+        start_search
+        path = seeking_dirt
+        move_dirtbot(path)
+        display_floorplan
+        clean_dirt
+        retrace_steps(path)
+        display_floorplan
+      end
     end
 
-    def seek_dirt(path)
-      location = path.current
-      return path if location.dirty?
+    def start_search
+      floorplan.render
+      puts ""
+      puts "Looking for dirt .... "
+    end
 
-      unvisited_neighbours = Bababaroomba::Services::Neighbours.call(floorplan: @floorplan,
-                                                                     tile: location).map(&:passable?)
-      raise Error, "Painted into corner!" if unvisited_neighbours.empty?
+    def seeking_dirt
+      path = Path.new origin: @origin, floorplan: @floorplan
+      Seek::LazyMaze.call(floorplan: floorplan, path: path)
+      puts ".... dirt found!"
+      puts path.breadcrumbs
+      puts ""
+      path
+    end
 
-      path.add_step(unvisited_neighbours.first)
-      seek_dirt(path)
+    def move_dirtbot(path)
+      puts "Moving dirt bot along path"
+      move_dirtbot(path)
+    end
+
+    def retrace_steps(path)
+      puts "Retracing steps back to origin"
+      return_path = path.double_back
+      move_dirtbot(return_path)
+      puts return_path.breadcrumbs
+      puts ""
+    end
+
+    def move_dirtbot(path)
+      @dirtbot.location.remove_item @dirtbot
+      path.current.add_item @dirtbot
+    end
+
+    def display_floorplan
+      puts ""
+      floorplan.render
+      puts ""
+    end
+
+    def clean_dirt
+      puts "Cleaning dirt"
+      puts ""
+      @dirtbot.clean
     end
 
     def self.run
       bababaroomba = Application.new
       bababaroomba.seek_and_destroy
-
-      # draw floorplan
-      # loop do
-      # while current has no dirt && path.length < flooplan.tiles.count && dirt remains
-      # next_path = current_path.exits.passable.unvisited.first
-      # current_path.add_step(next_path)
-      # has dirt ?
-      # clean it / print out path steps / print out map / reverse path / return to origin
-      # render map again
-      # endloop
-      # retry until all dirt gone
-
-      # policy 2:
-      # all paths = current_path.sexits.passable.unvisited.map { fork current path and add each exit to the new path }
-      # if any path has dirt, discard all paths and travel to it
     end
 
     private
 
     def randomly_seed_dirt
-      @floorplan.tiles.values.select(&:passable?).sample(1).each { |tile| tile.add_item(Models::Dirt.new) }
+      @floorplan.tiles.values.select(&:passable?).sample(initial_dirt).each { |tile| tile.add_item(Models::Dirt.new) }
+    end
+
+    def floor_plan_width
+      ARGV.fetch(0, 8).to_i
+    end
+
+    def floor_plan_height
+      ARGV.fetch(1, 6).to_i
+    end
+
+    def initial_dirt
+      ARGV.fetch(2, 3).to_i
     end
   end
 end
-
-# Bababaroomba::Application.run

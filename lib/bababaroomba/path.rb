@@ -11,7 +11,6 @@ module Bababaroomba
 
     def initialize(origin:, floorplan:)
       @origin = origin
-      @current = origin
       @step_sequence = [origin]
       @floorplan = floorplan
     end
@@ -23,7 +22,15 @@ module Bababaroomba
     end
 
     def double_back
-      # create a shallow clone of the current path and swap origin/current
+      reverse_path = Path.new origin: current, floorplan: floorplan
+
+      reversed_step_sequence = step_sequence.dup.reverse
+      reversed_step_sequence.delete current
+
+      reversed_step_sequence.each do |step|
+        reverse_path.add_step step
+      end
+      reverse_path
     end
 
     def length

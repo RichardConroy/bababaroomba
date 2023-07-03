@@ -82,4 +82,28 @@ RSpec.describe Bababaroomba::Path do
       end
     end
   end
+
+  describe "#double_back" do
+    before do
+      [[3, 2], [3, 3], [3, 4], [2, 4], [1, 4], [1, 3], [1, 2]].each do |coords|
+        path.add_step(floorplan.find!(*coords))
+      end
+    end
+
+    it "returns a reversed path" do
+      expect(path.double_back.breadcrumbs).to eq "NNEESSW"
+    end
+
+    it "shallow clones the original path" do
+      expect { path.double_back }.not_to change(path, :current)
+    end
+
+    it "assigns the origin point as the last point of the original path" do
+      expect(path.double_back.origin).to eq(path.current)
+    end
+
+    it "assigns the reversed current point as the origin point of the original path" do
+      expect(path.double_back.current).to eq(path.origin)
+    end
+  end
 end

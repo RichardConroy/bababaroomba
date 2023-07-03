@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "bababaroomba/models/item"
+require "bababaroomba/models/dirt"
 
 module Bababaroomba
   module Models
@@ -16,6 +17,10 @@ module Bababaroomba
 
       def glyph
         "@"
+      end
+
+      def clean
+        location.contents.select { |item| item.instance_of?(Dirt) }.each { |dirt| location.remove_item(dirt) }
       end
     end
   end

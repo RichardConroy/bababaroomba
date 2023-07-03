@@ -44,8 +44,6 @@ module Bababaroomba
         neighbours
       end
 
-      private
-
       def contents
         @contents ||= []
       end
