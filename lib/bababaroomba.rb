@@ -7,6 +7,7 @@ require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/path"
 require "bababaroomba/services/neighbours"
+require "bababaroomba/services/floorplan_generator"
 require "bababaroomba/seek/lazy_maze"
 require "pry"
 
@@ -18,11 +19,12 @@ module Bababaroomba
     attr_accessor :floorplan, :dirtbot, :origin
 
     def initialize
-      @floorplan = Models::Floorplan.generate_default(floor_plan_width, floor_plan_height)
+      @floorplan = Services::FloorplanGenerator.call(
+        width: floor_plan_width, height: floor_plan_height, dirt: initial_dirt
+      )
       @dirtbot = Models::Dirtbot.new
       @origin = floorplan.find!(0, 0)
       @origin.add_item @dirtbot
-      randomly_seed_dirt
     end
 
     def seek_and_destroy
@@ -88,10 +90,6 @@ module Bababaroomba
     end
 
     private
-
-    def randomly_seed_dirt
-      @floorplan.tiles.values.select(&:passable?).sample(initial_dirt).each { |tile| tile.add_item(Models::Dirt.new) }
-    end
 
     def floor_plan_width
       ARGV.fetch(0, 8).to_i
