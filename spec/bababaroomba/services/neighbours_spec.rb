@@ -6,10 +6,9 @@ require "bababaroomba/models/point"
 require "bababaroomba/models/tile"
 
 RSpec.describe Bababaroomba::Services::Neighbours, type: :service do
-  include Bababaroomba::Models
   subject(:neighbours) { described_class.call(floorplan: floorplan, tile: tile) }
 
-  let(:floorplan) { Bababaroomba::Models::Floorplan.generate_default(8, 5) }
+  let(:floorplan) { Bababaroomba::Services::FloorplanGenerator.call(width: 8, height: 5) }
   let(:x_coord) { 1 }
   let(:y_coord) { 1 }
   let(:tile) { floorplan.find! x_coord, y_coord }

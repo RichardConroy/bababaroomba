@@ -4,19 +4,13 @@ require "bababaroomba"
 require "bababaroomba/models/dirt"
 require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floorplan"
-require "pry"
+require "bababaroomba/services/floorplan_generator"
 
 RSpec.describe Bababaroomba::Models::Floorplan do
-  describe ".generate_default" do
-    subject(:floorplan) { described_class.generate_default(4, 4) }
-
-    it "creates floor tiles" do
-      expect(floorplan.tiles.count).to eq 16
-    end
-  end
-
   describe "#render" do
-    subject(:floorplan) { described_class.generate_default(8, 3) }
+    subject(:floorplan) { generator.call(width: 8, height: 3, dirt: 0) }
+
+    let(:generator) { Bababaroomba::Services::FloorplanGenerator }
 
     it "draws the map on the console" do
       expected_grid = <<~GRID

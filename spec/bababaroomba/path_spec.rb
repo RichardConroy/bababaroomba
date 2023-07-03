@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
 require "bababaroomba/path"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/models/tile"
 require "bababaroomba/models/null_tile"
 require "bababaroomba/models/point"
+require "bababaroomba/services/floorplan_generator"
 
 RSpec.describe Bababaroomba::Path do
   subject(:path) { described_class.new origin: origin, floorplan: floorplan }
 
-  let(:floorplan) { Bababaroomba::Models::Floorplan.generate_default(8, 5) }
+  let(:floorplan) { Bababaroomba::Services::FloorplanGenerator.call(width: 8, height: 5) }
   let(:origin) { floorplan.find! 2, 2 }
 
   describe "#add_step" do

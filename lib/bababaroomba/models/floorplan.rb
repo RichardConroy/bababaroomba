@@ -4,7 +4,6 @@ require "bababaroomba/models/point"
 require "bababaroomba/models/floor_tile"
 require "bababaroomba/models/null_tile"
 require "bababaroomba/models/tile"
-require "pry"
 
 module Bababaroomba
   module Models
@@ -37,26 +36,6 @@ module Bababaroomba
           row = 0.upto(width - 1).map { |x_coord| find!(x_coord, y_coord) }
           puts row.map(&:glyph).join
         end
-      end
-
-      # TODO: move all this setup into a floorplan generator
-      def self.generate_default(width = 20, height = 15)
-        floorplan = Floorplan.new
-        create_grid_tiles(width, height, floorplan)
-        floorplan
-      end
-
-      def self.create_grid_tiles(width, height, floorplan)
-        0.upto(width - 1).each do |x_coord|
-          0.upto(height - 1).each do |y_coord|
-            point = Point.new(x_coord, y_coord)
-            floorplan.tiles[point] = FloorTile.new(point: point)
-          end
-        end
-      end
-
-      def self.null_point
-        @null_point ||= Point.new(-1001, -1001)
       end
     end
   end

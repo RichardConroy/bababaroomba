@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
 require "bababaroomba/models/tile"
 require "bababaroomba/models/null_tile"
 
