@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba/models/connection"
 require "bababaroomba/models/dirt"
 require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floor_tile"

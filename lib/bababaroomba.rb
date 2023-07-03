@@ -25,11 +25,11 @@ module Bababaroomba
       randomly_seed_dirt
     end
 
-    def seek_and_destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def seek_and_destroy
       while floorplan.tiles.values.any?(&:dirty?)
         start_search
         path = seeking_dirt
-        move_dirtbot(path)
+        move_dirtbot_to_dirt(path)
         display_floorplan
         clean_dirt
         retrace_steps(path)
@@ -52,7 +52,7 @@ module Bababaroomba
       path
     end
 
-    def move_dirtbot(path)
+    def move_dirtbot_to_dirt(path)
       puts "Moving dirt bot along path"
       move_dirtbot(path)
     end

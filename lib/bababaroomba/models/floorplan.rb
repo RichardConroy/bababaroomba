@@ -43,11 +43,6 @@ module Bababaroomba
       def self.generate_default(width = 20, height = 15)
         floorplan = Floorplan.new
         create_grid_tiles(width, height, floorplan)
-        # 0.upto(width - 2).each do |x_coord|
-        #   0.upto(height - 2).each do |y_coord|
-        #     connect_tiles(floorplan, x_coord, y_coord)
-        #   end
-        # end
         floorplan
       end
 
@@ -58,14 +53,6 @@ module Bababaroomba
             floorplan.tiles[point] = FloorTile.new(point: point)
           end
         end
-      end
-
-      def self.connect_tiles(floorplan, x_coord, y_coord)
-        tile = floorplan.find(x_coord, y_coord)
-        north_boundary = floorplan.find!(x_coord, y_coord + 1)
-        east_boundary =  floorplan.find!(x_coord + 1, y_coord)
-        Connection.create north_boundary, tile
-        Connection.create east_boundary, tile
       end
 
       def self.null_point

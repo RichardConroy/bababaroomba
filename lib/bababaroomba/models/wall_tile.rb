@@ -4,7 +4,7 @@ require "bababaroomba/models/tile"
 
 module Bababaroomba
   module Models
-    # Tile subclass that represents an impassible structure
+    # Tile subclass that represents an impassible structure (unused)
     class WallTile < Tile
       def passable?
         false

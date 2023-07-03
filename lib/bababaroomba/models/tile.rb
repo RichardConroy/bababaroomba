@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "bababaroomba/models/connection"
-
 module Bababaroomba
   module Models
     # Abstract base class implementation of a tile in a floorplan
@@ -13,13 +11,6 @@ module Bababaroomba
         @connections = []
       end
 
-      def connect(connection)
-        raise ArgumentError, "connection is required" unless connection
-        raise ArgumentError, "must be a connection type" unless connection.is_a? Connection
-
-        connections << connection
-      end
-
       def passable?
         false
       end
@@ -27,8 +18,6 @@ module Bababaroomba
       def glyph
         "X"
       end
-
-      # TODO: delegate co-ordinates to stored point object
     end
   end
 end
