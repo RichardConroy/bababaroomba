@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "bababaroomba/error"
 require "bababaroomba/path"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/models/tile"

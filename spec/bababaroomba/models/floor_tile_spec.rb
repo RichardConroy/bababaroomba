@@ -30,11 +30,6 @@ RSpec.describe Bababaroomba::Models::FloorTile do
       end
     end
 
-    context "when item already at another tile" do
-      # (a) remove from other tile and add here, or raise, or introduce #move_item
-      xit "consider the correct behaviour here"
-    end
-
     context "with multiple objects" do
       let(:dirtbot) { Bababaroomba::Models::Dirtbot.new }
 
@@ -50,17 +45,8 @@ RSpec.describe Bababaroomba::Models::FloorTile do
   describe "#remove_item" do
     context "when item not at this tile" do
       it "raises" do
-        expect { floor_tile.remove_item(dirt) }.to raise_error(ArgumentError) # TODO: make a custom error
+        expect { floor_tile.remove_item(dirt) }.to raise_error(ArgumentError)
       end
-    end
-
-    context "when item at another tile" do
-      let(:other_point) { Bababaroomba::Models::Point.new 9, 9 }
-      let(:other_floor_tile) { described_class.new other_point: point }
-
-      before { other_floor_tile.add_item dirt }
-
-      xit "consider if this is necessary"
     end
 
     context "when not an Item" do

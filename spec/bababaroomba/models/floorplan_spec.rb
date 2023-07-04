@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "bababaroomba"
+require "bababaroomba/error"
 require "bababaroomba/models/dirt"
 require "bababaroomba/models/dirtbot"
 require "bababaroomba/models/floorplan"

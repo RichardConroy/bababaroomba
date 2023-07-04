@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "bababaroomba/error"
 require "bababaroomba/models/point"
 module Bababaroomba
   module Services
@@ -17,6 +18,7 @@ module Bababaroomba
       end
 
       def call # rubocop:disable Metrics/AbcSize
+        raise_when_floorplan_does_not_contain_tile!
         x_coord = tile.coords.x
         y_coord = tile.coords.y
         [
@@ -30,6 +32,14 @@ module Bababaroomba
       private
 
       attr_accessor :floorplan, :tile
+
+      def raise_when_floorplan_does_not_contain_tile!
+        x_coord = tile.coords.x
+        y_coord = tile.coords.y
+        floorplan.find!(x_coord, y_coord)
+      rescue KeyError
+        raise Bababaroomba::Error, "Tile: [#{[x_coord, y_coord]}] not part of floorplan"
+      end
     end
   end
 end

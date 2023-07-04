@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "bababaroomba/error"
 require "bababaroomba/services/neighbours"
 require "bababaroomba/models/floorplan"
 require "bababaroomba/models/point"
 require "bababaroomba/models/tile"
+require "bababaroomba/models/floor_tile"
 
 RSpec.describe Bababaroomba::Services::Neighbours, type: :service do
   subject(:neighbours) { described_class.call(floorplan: floorplan, tile: tile) }
@@ -53,8 +55,10 @@ RSpec.describe Bababaroomba::Services::Neighbours, type: :service do
   context "when outside the room" do
     let(:x_coord) { 10 }
     let(:y_coord) { 10 }
+    let(:point) { Bababaroomba::Models::Point.new(x_coord, y_coord) }
+    let(:tile) { Bababaroomba::Models::FloorTile.new point: point }
 
-    xit "raises" do
+    it "raises" do
       expect { neighbours }.to raise_error Bababaroomba::Error
     end
   end

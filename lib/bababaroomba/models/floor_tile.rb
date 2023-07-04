@@ -37,13 +37,6 @@ module Bababaroomba
         contents.any? { |item| item.is_a? Models::Dirt }
       end
 
-      def neighbours
-        neighbours = connections.map { |connection| [connection.first_tile, connection.second_tile] }
-                                .flatten.uniq.select(&:passable?)
-        neighbours.delete(self)
-        neighbours
-      end
-
       def contents
         @contents ||= []
       end

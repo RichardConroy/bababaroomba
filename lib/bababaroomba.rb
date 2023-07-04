@@ -12,19 +12,9 @@ require "bababaroomba/seek/lazy_maze"
 require "pry"
 
 module Bababaroomba
-  class Error < StandardError; end
-
   # Main CLI entrypoint and integration
   class Application
     attr_accessor :floorplan, :dirtbot, :origin
-
-    def self.default_floorplan
-      Services::FloorplanGenerator.call(
-        width: floor_plan_width,
-        height: floor_plan_height,
-        dirt: initial_dirt
-      )
-    end
 
     def initialize(floorplan: default_floorplan)
       @floorplan = floorplan
@@ -95,15 +85,23 @@ module Bababaroomba
       bababaroomba.seek_and_destroy
     end
 
-    def self.floor_plan_width
+    def default_floorplan
+      Services::FloorplanGenerator.call(
+        width: floor_plan_width,
+        height: floor_plan_height,
+        dirt: initial_dirt
+      )
+    end
+
+    def floor_plan_width
       ARGV.fetch(0, 8).to_i
     end
 
-    def self.floor_plan_height
+    def floor_plan_height
       ARGV.fetch(1, 6).to_i
     end
 
-    def self.initial_dirt
+    def initial_dirt
       ARGV.fetch(2, 3).to_i
     end
   end
