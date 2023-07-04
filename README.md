@@ -1,10 +1,10 @@
 # Bababaroomba
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bababaroomba`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Modelling the pathfinding operation of a room cleaning robot.
 
 ## Installation
+
+Developed with Ruby 2.6.6 but in practice should be insensitive to a lot of ruby versions.
 
 Add this line to your application's Gemfile:
 
@@ -67,17 +67,77 @@ SSWWWWWW (origin)
 
 ## Usage
 
-TODO: Write usage instructions here
+run `$ exe/bababaroomba` to execute a shell command with a basic square grid with randomly placed dirt
 
-## Development
+or `$ exe/bababaroomba WIDTH HEIGHT DIRT` to customise the grid.
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+e.g.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+$ exe/bababaroomba 5 3 2
+.....
+.~...
+@~...
 
-## Contributing
+Looking for dirt ....
+.... dirt found!
+NNES
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/bababaroomba. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/bababaroomba/blob/master/CODE_OF_CONDUCT.md).
+Moving dirt bot along path
+
+.....
+.@...
+.~...
+
+Cleaning dirt
+
+Retracing steps back to origin
+NWSS
+
+
+.....
+.....
+@~...
+
+.....
+.....
+@~...
+
+Looking for dirt ....
+.... dirt found!
+NNESS
+
+Moving dirt bot along path
+
+.....
+.....
+.@...
+
+Cleaning dirt
+
+Retracing steps back to origin
+NNWSS
+
+
+.....
+.....
+@....
+
+```
+
+The algorithm isn't particularly clever - it simply builds a path where it takes the first neighbouring option when there are multiple choices. In practice this will mean the order in which `Neighbours.call` returns the adjacent tiles matters. With a regular rectangular grid and no obstructions this means that the bot will take a snake like path:
+
+```
+....    ^>..
+..~.    ^v~.
+....    ^v^.
+@...    @v>.
+
+```
+
+
+
+
 
 ## License
 
