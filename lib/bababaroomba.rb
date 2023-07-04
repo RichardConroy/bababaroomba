@@ -18,10 +18,16 @@ module Bababaroomba
   class Application
     attr_accessor :floorplan, :dirtbot, :origin
 
-    def initialize
-      @floorplan = Services::FloorplanGenerator.call(
-        width: floor_plan_width, height: floor_plan_height, dirt: initial_dirt
+    def self.default_floorplan
+      Services::FloorplanGenerator.call(
+        width: floor_plan_width,
+        height: floor_plan_height,
+        dirt: initial_dirt
       )
+    end
+
+    def initialize(floorplan: default_floorplan)
+      @floorplan = floorplan
       @dirtbot = Models::Dirtbot.new
       @origin = floorplan.find!(0, 0)
       @origin.add_item @dirtbot
@@ -89,17 +95,15 @@ module Bababaroomba
       bababaroomba.seek_and_destroy
     end
 
-    private
-
-    def floor_plan_width
+    def self.floor_plan_width
       ARGV.fetch(0, 8).to_i
     end
 
-    def floor_plan_height
+    def self.floor_plan_height
       ARGV.fetch(1, 6).to_i
     end
 
-    def initial_dirt
+    def self.initial_dirt
       ARGV.fetch(2, 3).to_i
     end
   end
